@@ -1,40 +1,48 @@
-import React,{ useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {Link} from 'react-router-dom'
 
 const Users = () => { 
     const [users, setUsers] = useState([]);
     console.log(users)
-    useEffect(() =>{
+    useEffect(() => {
         fetch('http://localhost:5000/users')
         .then(res => res.json())
-        .then(data =>setUsers(data))
+        .then(data => setUsers(data))
     }, []);
 
-
-    // DELETE AN USER
-    const handleDeletedUser = id =>{
-        const proceed = window.confirm('Are you sure you want to delete?');
-        if(proceed){
+    // Delete user
+    const handleDeletebutton = id => {
+        const process = window.confirm('Are you sure want to delete?');
+        if(process){
             fetch(`http://localhost:5000/users/${id}`, {
             method: 'DELETE'
+            // headers: {
+            //     'content-type': 'application/json'
+            // },
+            // body: JSON.stringify(users)
         })
         .then(res => res.json())
         .then(data => {
-           if(data.deletedCount > 0){
-            alert('Deleted successfully');
-            const remainingUsers = users.filter(user => user._id !== id)
-            setUsers(remainingUsers)
-           }
+            if(data.deletedCount > 0){
+                alert('Deleted successfully.');
+                const remainingUsers = users.filter(user => user._id !== id)
+                setUsers(remainingUsers)
+            }
         })
         }
     }
     return (
         <div>
-            <h3>{users.length}</h3>
-            {
-                users.map(user => <li key={user._id}
-                > {user.name}: {user.email}<button onClick={() => handleDeletedUser(user._id)}>X</button> <Link to={`/users/update/${user._id}`}><button>Update</button></Link></li>)
-            }
+            <h3>This is user</h3>
+            <ul>
+                {
+                    users.map(user => <li 
+                    key={user._id}>
+                    {user.name} : {user.email} <button onClick={() =>handleDeletebutton(user._id)}>X</button>
+                    <Link to={`/users/update/${user._id}`}><button>Update</button></Link>
+                    </li>)
+                }
+            </ul>
         </div>
     );
 };

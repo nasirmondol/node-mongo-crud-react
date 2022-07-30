@@ -20,8 +20,9 @@ const AddUser = () => {
         .then(data =>{
             if(data.insertedId){
                 alert('Successfully added the user')
+                e.target.reset()
             }
-            e.target.reset()
+            
         })
         e.preventDefault()
     }
